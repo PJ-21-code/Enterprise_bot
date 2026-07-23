@@ -1,0 +1,14 @@
+numpy
+pandas
+langchain-core
+langchain-community
+langchain
+langchain-openai
+langchain-huggingface
+huggingface-hub
+chromadb
+sentence-transformers
+weave
+python-dotenv
+gdown
+langchain-experimental
