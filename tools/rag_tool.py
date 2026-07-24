@@ -53,7 +53,6 @@ Here are some documents that are relevant to the question mentioned below.
 {question}
 
 """
-user_query="" #to be filled
 
 
 @tool
