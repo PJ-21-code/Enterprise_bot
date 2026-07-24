@@ -16,8 +16,8 @@ load_dotenv()
 groq_api_key= os.getenv("GROQ_API_KEY")
 
 client= Groq()
-#loading documents
 
+#loading documents
 pdf_loader= PyPDFLoader("")
 pages= pdf_loader.load()
 full_text= " ".join([page.page_content for page in pages])
