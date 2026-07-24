@@ -6,7 +6,7 @@ import os
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,PyPDFDirectoryLoader
-from langchain_community.vectorstores import Chroma
+from langchain_chroma import Chroma
 from groq import Groq
 from dotenv import load_dotenv
 from langchain_core.tools import tool
@@ -23,7 +23,7 @@ pages= pdf_loader.load()
 full_text= " ".join([page.page_content for page in pages])
 
 
-embeddings= HuggingFaceEmbeddings(model_name="all-Mini-L6-v2")
+embeddings= HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 text_splitter= SemanticChunker(embeddings=embeddings)
 
 semantic_chunks= text_splitter.create_documents([full_text])
@@ -68,7 +68,7 @@ def rag_tool(user_query: str):
           response (str): Return the generated response or an error message if an exception occurs.
 
     """
-    relevant_document_chunks= retriever._get_relevant_documents(user_query)
+    relevant_document_chunks= retriever.invoke(user_query)
     context_list= [data.page_content for data in relevant_document_chunks]
     context_for_query= ". ".join(context_list)
 

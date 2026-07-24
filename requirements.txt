@@ -12,3 +12,5 @@ weave
 python-dotenv
 gdown
 langchain-experimental
+langchain-chroma
+langchain-groq

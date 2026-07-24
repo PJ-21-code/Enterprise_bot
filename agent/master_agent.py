@@ -1,30 +1,31 @@
 from langchain_core.tools import tool
 from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
-from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
+from langchain_core.prompts import ChatPromptTemplate
 from tools.sql_tool import sql_tool
 from tools.rag_tool import rag_tool
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 import os
+import pypdf
 from dotenv import load_dotenv
 
 load_dotenv()
 
-openai_api_key= os.getenv("OPENAI_API_KEY")
+groq_api_key= os.getenv("GROQ_API_KEY")
 system_message= """"""  #to be filled
 
 prompt= ChatPromptTemplate.from_messages([
-    {"system" ,system_message},
-    {"human","{input}"},
-    {"placeholder","{agent_scratchpad}"}
+    ("system" ,system_message),
+    ("human","{input}"),
+    ("placeholder","{agent_scratchpad}"),
 ])
 
-llm= ChatOpenAI(
-    model= 'gpt-5.6-terra',
-    api_key=openai_api_key,
+llm= ChatGroq(
+    model= 'llama-3.3-70b-versatile',
+    api_key=groq_api_key,
     temperature=0
 )
 
-tools= [sql_tool,rag_tool]
+tools= [rag_tool]
 agent= create_tool_calling_agent(llm=llm,prompt=prompt,tools=tools)
 agent_execution= AgentExecutor(agent=agent,tools=tools,verbose=True)
 
@@ -55,3 +56,6 @@ def chat_with_enterprise_agent():
         conversation_history.append({"role": "assistant", "content": agent_response})
 
         print(f"Agent: {agent_response}")
+
+
+chat_with_enterprise_agent()        
