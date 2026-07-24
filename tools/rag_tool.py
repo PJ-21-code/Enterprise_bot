@@ -18,7 +18,7 @@ groq_api_key= os.getenv("GROQ_API_KEY")
 client= Groq()
 
 #loading documents
-pdf_loader= PyPDFLoader("")
+pdf_loader= PyPDFLoader("iso27001.pdf") #used for rag tool testing
 pages= pdf_loader.load()
 full_text= " ".join([page.page_content for page in pages])
 
