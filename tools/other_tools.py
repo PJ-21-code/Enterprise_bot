@@ -14,25 +14,23 @@ def benford_finance_fraud_detector(transaction_amounts: list):
     counts = df["digit"].value_counts().sort_index()
     total = len(leading_digits)
 
-    actual_props = (counts / total).to_dict()
+    actual_proportion = (counts / total).to_dict()
 
-    expected_props = {
+    expected_proportion = {
       d: np.log10(1 + 1 / d) for d in range(1, 10)
      }
 
     discrepancy = sum(
-      abs(actual_props.get(d, 0) - expected_props[d]) for d in range(1, 10)
+      abs(actual_proportion.get(d, 0) - expected_proportion[d]) for d in range(1, 10)
      )
 
-    is_suspicious = (
-      discrepancy > 0.15
-  )  
+    is_suspicious = (discrepancy > 0.15)  
 
     return {
       "total_transactions_analyzed": total,
       "discrepancy_score": round(discrepancy, 4),
       "fraud_risk_flag": is_suspicious,
-      "observed_distribution": actual_props,
+      "observed_distribution": actual_proportion,
     }
     
 
