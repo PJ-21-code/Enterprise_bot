@@ -8,11 +8,7 @@ def calculate_variance():
 
 @tool
 def benford_finance_fraud_detector(transaction_amounts: list):
-    leading_digits = [
-      int(str(abs(amt)).strip("0.")[0])
-      for amt in transaction_amounts
-      if amt != 0
-    ]
+    leading_digits = [int(str(abs(amt)).strip("0.")[0]) for amt in transaction_amounts if amt != 0]
 
     df = pd.DataFrame({"digit": leading_digits})
     counts = df["digit"].value_counts().sort_index()
