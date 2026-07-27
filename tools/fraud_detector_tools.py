@@ -84,7 +84,7 @@ def detect_split_transactions(transaction_df= pd.DataFrame, threshold :float= 10
                 "timestamps": cluster["timestamp"].astype(str).tolist(),
             })
 
-            return{
-                "total_suspicious_clusters_found": len(flagged_clusters),
-                "details": flagged_clusters,
-            }
+    return{
+        "total_suspicious_clusters_found": len(flagged_clusters),
+        "details": flagged_clusters,
+    }
