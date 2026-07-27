@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import json
 import streamlit as st
+import chainlit as cl
 from datetime import datetime
 from langchain_openai import ChatOpenAI
 
