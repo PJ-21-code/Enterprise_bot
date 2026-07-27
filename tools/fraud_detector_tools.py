@@ -47,5 +47,44 @@ def benford_finance_fraud_detector(transaction_amounts: list) ->dict:
     
 
 @tool
-def second_fraud_detector():
-    pass
+def detect_split_transactions(transaction_df= pd.DataFrame, threshold :float= 10000.0, window_hours: int=36):
+    """Detects potential split transactions designed to bypass approval limits.
+
+    Parameters:
+    - transactions_df: DataFrame with columns ['vendor_id', 'amount',
+    'timestamp']
+    - threshold: The company policy limit that requires approval (e.g., $10,000)
+    - window_hours: Time window to look for clustered transactions (e.g., 48
+    hours)
+    """
+
+    transaction_df['timestamp']= pd.to_datetime(transaction_df['timestamp'])
+    lower_bound= threshold*0.80
+
+    suspicious_slice= transaction_df[(transaction_df['amount']>= lower_bound) & (transaction_df['amount']<= threshold)].copy()
+
+    flagged_clusters=[]
+
+    for vendor_id, group in suspicious_slice.groupby("vendor_id"):
+
+        group = group.sort_values("timestamp")
+
+        group['time_diff']= group['timestamp'].diff().dt.total_seconds()/3600
+
+        cluster= group[(group['time_diff']<= window_hours) | (group['time_diff'].isnull())]
+
+        if(len(cluster)>=2):
+            total_split_amount= cluster['amount'].sum()
+
+            flagged_clusters.append({
+                "vendor_id": vendor_id,
+                "transaction_count": len(cluster),
+                "total_amount": round(total_split_amount, 2),
+                "individual_amounts": cluster["amount"].tolist(),
+                "timestamps": cluster["timestamp"].astype(str).tolist(),
+            })
+
+            return{
+                "total_suspicious_clusters_found": len(flagged_clusters),
+                "details": flagged_clusters,
+            }
