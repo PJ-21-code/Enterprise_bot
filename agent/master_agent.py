@@ -1,5 +1,7 @@
 from langchain_core.tools import tool
 from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
+from langchain_core.chat_history import InMemoryChatMessageHistory
+from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.prompts import ChatPromptTemplate
 from tools.sql_tool import sql_tool
 from tools.rag_tool import rag_tool
@@ -30,13 +32,26 @@ tools= [rag_tool]
 agent= create_tool_calling_agent(llm=llm,prompt=prompt,tools=tools)
 agent_execution= AgentExecutor(agent=agent,tools=tools,verbose=True)
 
+store={}
+
+def session_history(session_id: str):
+    if session_id not in store:
+        store[session_id]= InMemoryChatMessageHistory()
+    return store[session_id]
+
+agent_with_chat_history= RunnableWithMessageHistory(
+    agent_execution,
+    session_history,
+    input_messages_key="input",
+    history_messages_key="chat_history"
+)
 def chat_with_enterprise_agent():
 
     print("Chat with our agent! Type 'exit' to end conversation")
 
-    conversation_history=[{"role":"assistant", "content":"Hey! How can i help you?"}]
-
     print("Hi! How can I help you?")
+
+    session_config = {"configurable": {"session_id": "session_1"}}
 
     while True:
 
@@ -45,17 +60,11 @@ def chat_with_enterprise_agent():
             print("Agent: Thanks for chatting, Goodbye!")
             break
 
-        conversation_history.append({"role":"user","content": user_query})
-
-        conversation_input = "\n".join(
-            [f"{turn['role'].capitalize()}: {turn['content']}" for turn in conversation_history]
+        response = agent_with_chat_history.invoke(
+        {"input": user_query}, config=session_config
         )
 
-        response= agent_execution.invoke({"input": conversation_input})
         agent_response= response['output']
-
-        conversation_history.append({"role": "assistant", "content": agent_response})
-
         print(f"Agent: {agent_response}")
 
 
