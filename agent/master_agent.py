@@ -28,7 +28,7 @@ llm= ChatGroq(
     temperature=0
 )
 
-tools= [rag_tool]
+tools= [rag_tool, sql_tool,calculate_variance,benford_finance_fraud_detector,detect_split_transactions]
 agent= create_tool_calling_agent(llm=llm,prompt=prompt,tools=tools)
 agent_execution= AgentExecutor(agent=agent,tools=tools,verbose=True)
 
