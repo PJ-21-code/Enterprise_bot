@@ -14,3 +14,4 @@ gdown
 langchain-experimental
 langchain-chroma
 langchain-groq
+detoxify

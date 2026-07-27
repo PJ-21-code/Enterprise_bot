@@ -8,7 +8,7 @@ from tools.rag_tool import rag_tool
 from tools.fraud_detector_tools import calculate_variance, benford_finance_fraud_detector, detect_split_transactions
 from langchain_groq import ChatGroq
 import os
-import pypdf
+from detoxify import Detoxify
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -51,14 +51,24 @@ def chat_with_enterprise_agent():
 
     print("Hi! How can I help you?")
 
+    model= Detoxify('original')
+    
     session_config = {"configurable": {"session_id": "session_1"}}
 
     while True:
 
         user_query= input("You: ")
+
+        score= model.predict(user_query)
+        if score["toxicity"]> 0.5:
+            print("Sorry, I cannot help you with this behaviour")
+            break
+
         if user_query.lower()== 'exit':
             print("Agent: Thanks for chatting, Goodbye!")
             break
+
+        
 
         response = agent_with_chat_history.invoke(
         {"input": user_query}, config=session_config
