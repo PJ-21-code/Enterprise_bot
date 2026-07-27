@@ -3,8 +3,17 @@ import pandas as pd
 from langchain_core.tools import tool
 
 @tool
-def calculate_variance():
-    pass
+def calculate_variance(actual: float, budgeted: float) -> dict:
+    diff= actual- budgeted
+    percent= (diff/budgeted)*100 if budgeted!=0 else 0
+    is_high_risk= abs(percent) >= 10
+
+    return {
+        "difference": round(diff,2),
+        "percentage change": round(percent,2),
+        "High risk flag": is_high_risk
+    }
+
 
 @tool
 def benford_finance_fraud_detector(transaction_amounts: list):
