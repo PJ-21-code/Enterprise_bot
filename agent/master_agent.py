@@ -52,7 +52,7 @@ def chat_with_enterprise_agent():
     print("Hi! How can I help you?")
 
     model= Detoxify('original')
-    
+
     session_config = {"configurable": {"session_id": "session_1"}}
 
     while True:
@@ -61,7 +61,7 @@ def chat_with_enterprise_agent():
 
         score= model.predict(user_query)
         if score["toxicity"]> 0.5:
-            print("Sorry, I cannot help you with this behaviour")
+            print("Sorry, I cannot help you with this kind of behaviour")
             break
 
         if user_query.lower()== 'exit':
