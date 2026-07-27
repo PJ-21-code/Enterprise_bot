@@ -5,6 +5,8 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
+from openai import RateLimitError
+from tenacity import retry, retry_if_exception_type, wait_exponential, stop_after_attempt
 
 load_dotenv()
 
@@ -45,21 +47,28 @@ sql_agent= create_sql_agent(
 
 # Wrapping sql agent into tool
 @tool
-def sql_tool(user_input):
+@retry(
+    retry= retry_if_exception_type(RateLimitError),
+    wait= wait_exponential(multiplier=1,min=1,max=10),
+    stop= stop_after_attempt(4)
+)
+def sql_tool(user_query):
     """
     Executes a SQL query using the sqlite_agent and returns the result.
 
     Args:
-        user_input (str): a natural language query string explaining what information is required while also providing the necessary details to get the information.
+        user_query (str): a natural language query string explaining what information is required while also providing the necessary details to get the information.
 
     Returns:
         str: The result of the SQL query execution. If an error occurs, the exception is returned as a string.
     """
     try:
-        response = sql_agent.invoke(user_input)
+        response = sql_agent.invoke(user_query)
 
         prediction = response['output']
 
+    except RateLimitError:
+        raise    
     except Exception as e:
         prediction = e
 
