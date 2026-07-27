@@ -3,7 +3,7 @@ from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate
 from tools.sql_tool import sql_tool
 from tools.rag_tool import rag_tool
-from tools.other_tools import calculate_variance, benford_finance_fraud_detector, second_fraud_detector
+from tools.fraud_detector_tools import calculate_variance, benford_finance_fraud_detector, second_fraud_detector
 from langchain_groq import ChatGroq
 import os
 import pypdf
