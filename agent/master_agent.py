@@ -80,28 +80,20 @@ def chat_with_enterprise_agent(user_query: str, session_id: str= "default_sessio
 
     session_config = {"configurable": {"session_id": session_id}}
 
-    while True:
 
-        if user_query.lower()== 'exit':
-            print("Agent: Thanks for chatting, Goodbye!")
-            break
-        try:
-           check_prompt_injection(user_query)  #for checking prompt injection attack
+    check_prompt_injection(user_query)  #for checking prompt injection attack
 
-           score= model.predict(user_query)   # for checking any toxic input
-           if score["toxicity"]> 0.5:
-              print("Sorry, I cannot help you with this kind of behaviour")
-              continue
-        except ValueError as e:
-           print(f"Agent: {str(e)}")
-           continue   
+    score= model.predict(user_query)   # for checking any toxic input
+    if score["toxicity"]> 0.5:
+        print("Sorry, I cannot help you with this kind of behaviour")
+               
 
         
-        response = agent_with_chat_history.invoke(
-        {"input": user_query}, config=session_config
-        )
+    response = agent_with_chat_history.invoke(
+    {"input": user_query}, config=session_config
+    )
 
-        agent_response= response['output']
-        print(f"Agent: {agent_response}")
+    agent_response= response['output']
+    return agent_response
 
        
