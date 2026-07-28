@@ -7,7 +7,7 @@ from langchain_experimental.text_splitter import SemanticChunker
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,PyPDFDirectoryLoader
 from langchain_chroma import Chroma
-from groq import Groq, RateLimitError, log_groq_retry
+from groq import Groq, RateLimitError
 from dotenv import load_dotenv
 from langchain_core.tools import tool
 from tenacity import retry, retry_if_exception_type, wait_exponential, stop_after_attempt

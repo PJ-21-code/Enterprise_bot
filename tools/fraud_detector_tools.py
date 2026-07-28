@@ -20,6 +20,10 @@ def calculate_variance(actual: list, budgeted: float) -> dict:
 
 @tool
 def benford_finance_fraud_detector(transaction_amounts: list) ->dict:
+    """
+    Takes a list of financial transaction numbers,
+    analyzes their leading digits, and checks against Benford's Law.
+    """
     leading_digits = [int(str(abs(amt)).strip("0.")[0]) for amt in transaction_amounts if amt != 0]
 
     df = pd.DataFrame({"digit": leading_digits})

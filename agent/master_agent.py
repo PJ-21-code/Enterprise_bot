@@ -45,6 +45,7 @@ agent_with_chat_history= RunnableWithMessageHistory(
     input_messages_key="input",
     history_messages_key="chat_history"
 )
+
 def chat_with_enterprise_agent():
 
     print("Chat with our agent! Type 'exit' to end conversation")
