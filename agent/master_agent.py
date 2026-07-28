@@ -34,6 +34,31 @@ agent_execution= AgentExecutor(agent=agent,tools=tools,verbose=True)
 
 store={}
 
+import re
+
+
+def check_prompt_injection(user_query: str):
+  
+  injection_patterns = [
+      r"ignore previous instructions",
+      r"ignore all prior instructions",
+      r"disregard previous rules",
+      r"you are now unrestricted",
+      r"system prompt",
+      r"reveal your system message",
+      r"print the database",
+      r"drop table",
+  ]
+
+  text_lower = user_query.lower()
+
+  for pattern in injection_patterns:
+    if re.search(pattern, text_lower):
+      raise ValueError(
+          f"Security Alert: Potential prompt injection blocked (Matched rule:"
+          f" '{pattern}')"
+      )
+
 def session_history(session_id: str):
     if session_id not in store:
         store[session_id]= InMemoryChatMessageHistory()
@@ -46,7 +71,7 @@ agent_with_chat_history= RunnableWithMessageHistory(
     history_messages_key="chat_history"
 )
 
-def chat_with_enterprise_agent():
+def chat_with_enterprise_agent(user_query: str):
 
     print("Chat with our agent! Type 'exit' to end conversation")
 
@@ -58,19 +83,21 @@ def chat_with_enterprise_agent():
 
     while True:
 
-        user_query= input("You: ")
-
-        score= model.predict(user_query)
-        if score["toxicity"]> 0.5:
-            print("Sorry, I cannot help you with this kind of behaviour")
-            break
-
         if user_query.lower()== 'exit':
             print("Agent: Thanks for chatting, Goodbye!")
             break
+        try:
+           check_prompt_injection(user_query)  #for checking prompt injection attack
+
+           score= model.predict(user_query)   # for checking any toxic input
+           if score["toxicity"]> 0.5:
+              print("Sorry, I cannot help you with this kind of behaviour")
+              continue
+        except ValueError as e:
+           print(f"Agent: {str(e)}")
+           continue   
 
         
-
         response = agent_with_chat_history.invoke(
         {"input": user_query}, config=session_config
         )
@@ -78,5 +105,5 @@ def chat_with_enterprise_agent():
         agent_response= response['output']
         print(f"Agent: {agent_response}")
 
-
-chat_with_enterprise_agent()        
+user_query= input("You: ")
+chat_with_enterprise_agent(user_query=user_query)        
