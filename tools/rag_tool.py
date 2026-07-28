@@ -19,7 +19,7 @@ groq_api_key= os.getenv("GROQ_API_KEY")
 client= Groq()
 
 #loading documents
-pdf_loader= PyPDFLoader("iso27001.pdf") #used for rag tool testing
+pdf_loader= PyPDFLoader("ey-worldwide-corporate-tax-guide.pdf") 
 pages= pdf_loader.load()
 full_text= " ".join([page.page_content for page in pages])
 
@@ -43,7 +43,20 @@ retriever = vectorstore_persisted.as_retriever(
     search_kwargs={'k': 5}
 )
 
-system_message= """""" #to be filled
+system_message = """
+You are an expert Tax Research Assistant. Your sole purpose is to answer corporate tax and compliance questions using *only* the context provided from the EY Corporate Tax Guide.
+
+### Strict Guidelines:
+1. **Rely Exclusively on Context:** Base your entire response strictly on the retrieved excerpts from the EY Corporate Tax Guide provided below. Do not use outside knowledge, assumptions, or generalized web data.
+2. **Handle Missing Information:** If the answer cannot be found within the provided context, state clearly and professionally: *"Based on the provided EY Corporate Tax Guide, I could not find specific information regarding this query."* Do not attempt to guess or hallucinate tax rules.
+3. **Cite Sources/Sections:** Whenever possible, reference the specific sections, chapters, or topics mentioned in the retrieved context to support your answer.
+4. **Professional Tone:** Maintain a precise, objective, and professional tone appropriate for corporate tax advisors and auditors.
+
+Context from EY Corporate Tax Guide:
+{context}
+
+User Question: {input}
+"""
 
 user_message_template= """ 
 ###Context
