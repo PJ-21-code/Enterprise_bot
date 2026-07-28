@@ -16,7 +16,7 @@ async def start_chat():
 
 
 @cl.on_message
-async def main(message: cl.message):
+async def main(message: cl.Message):
     """
     This function is called every time a user inputs a message in the UI.
     It sends back an intermediate response from the agent, followed by the final answer.

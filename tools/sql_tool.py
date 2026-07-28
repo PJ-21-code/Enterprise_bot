@@ -2,7 +2,7 @@ from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_community.agent_toolkits import create_sql_agent
 from langchain_core.tools import tool
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os
 from openai import RateLimitError
@@ -46,12 +46,12 @@ full_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-openai_api_key= os.getenv("OPENAI_API_KEY")
+groq_api_key= os.getenv("GROQ_API_KEY")
 
 
-llm= ChatOpenAI(
-    model="gpt-4",
-    api_key= openai_api_key,
+llm= ChatGroq(
+    model= 'llama-3.3-70b-versatile',
+    api_key=groq_api_key,
     temperature=0
 )
 
