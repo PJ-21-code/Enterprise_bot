@@ -8,6 +8,7 @@ from tools.rag_tool import rag_tool
 from tools.fraud_detector_tools import calculate_variance, benford_finance_fraud_detector, detect_split_transactions
 from langchain_groq import ChatGroq
 import os
+import re
 from detoxify import Detoxify
 from dotenv import load_dotenv
 
@@ -18,6 +19,7 @@ system_message= """"""  #to be filled
 
 prompt= ChatPromptTemplate.from_messages([
     ("system" ,system_message),
+    ("placeholder","{chat_history}")
     ("human","{input}"),
     ("placeholder","{agent_scratchpad}"),
 ])
@@ -33,9 +35,6 @@ agent= create_tool_calling_agent(llm=llm,prompt=prompt,tools=tools)
 agent_execution= AgentExecutor(agent=agent,tools=tools,verbose=True)
 
 store={}
-
-import re
-
 
 def check_prompt_injection(user_query: str):
   
@@ -71,7 +70,7 @@ agent_with_chat_history= RunnableWithMessageHistory(
     history_messages_key="chat_history"
 )
 
-def chat_with_enterprise_agent(user_query: str):
+def chat_with_enterprise_agent(user_query: str, session_id: str= "default_session"):
 
     print("Chat with our agent! Type 'exit' to end conversation")
 
@@ -79,7 +78,7 @@ def chat_with_enterprise_agent(user_query: str):
 
     model= Detoxify('original')
 
-    session_config = {"configurable": {"session_id": "session_1"}}
+    session_config = {"configurable": {"session_id": session_id}}
 
     while True:
 
@@ -105,5 +104,4 @@ def chat_with_enterprise_agent(user_query: str):
         agent_response= response['output']
         print(f"Agent: {agent_response}")
 
-user_query= input("You: ")
-chat_with_enterprise_agent(user_query=user_query)        
+       
