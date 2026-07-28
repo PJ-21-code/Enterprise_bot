@@ -12,3 +12,5 @@ env/
 .coverage
 
 .chainlit/
+
+enterprise_vector_db/
