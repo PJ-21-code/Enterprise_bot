@@ -10,7 +10,7 @@ async def start_chat():
   cl.user_session.set("session_id", "enterprise_user_session_1")
 
   await cl.Message(
-      content="Hi! I am your Enterprise Forensic Assistant. How can I help you"
+      content="Hi! I am your Enterprise Assistant. How can I help you"
       " today?"
   ).send()
 
