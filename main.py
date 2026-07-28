@@ -29,6 +29,16 @@ async def main(message: cl.message):
     """
 
     user_query= message.content
+
+    if user_query.lower() in ["exit", "quit", "bye"]:
+       await cl.Message(
+          content=(
+            "Agent: Thanks for chatting, Goodbye! Feel free to start a new chat"
+            " whenever you're ready."
+        )
+       ).send()
+       return
+
     session_id= cl.user_session.get("session_id")
 
     msg= cl.Message(content="")
