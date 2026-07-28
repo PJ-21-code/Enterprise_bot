@@ -32,7 +32,7 @@ semantic_chunks= text_splitter.create_documents([full_text])
 collection= 'Enterprise_info'
 vectorstore_persisted = Chroma(
     collection_name=collection,
-    persist_directory='./enterprise_db',
+    persist_directory='./enterprise_vector_db',
     embedding_function=embeddings
 )
 
