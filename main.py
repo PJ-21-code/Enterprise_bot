@@ -59,6 +59,10 @@ async def main(message: cl.Message):
        msg.content = f"An error occurred: {str(e)}"
        await msg.update()
 
+    except Exception as e:
+       msg.content = f"⚠️ **API Limit Reached:** Please wait a moment and try again. (Details: {str(e)})"
+       await msg.update()
+
 
 
 
