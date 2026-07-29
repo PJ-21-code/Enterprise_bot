@@ -25,7 +25,7 @@ async def main(message: cl.Message):
         message: The user's message.
 
     Returns:
-        None.
+        Response to user's query
     """
 
     user_query= message.content
