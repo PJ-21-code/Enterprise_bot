@@ -6,7 +6,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from tools.sql_tool import sql_tool
 from tools.rag_tool import rag_tool
 from tools.fraud_detector_tools import calculate_variance, benford_finance_fraud_detector, detect_split_transactions
-from langchain_groq import ChatGroq
+from langchain_google_genai import ChatGoogleGenerativeAI
 import os
 import re
 from detoxify import Detoxify
@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-groq_api_key= os.getenv("GROQ_API_KEY")
+gemini_api_key= os.getenv("GEMINI_API_KEY")
 
 system_message = """
 You are an expert AI Enterprise Financial & Tax Assistant equipped with specialized tools, including an EY Corporate Tax Guide RAG retrieval tool, a secure SQL database tool, and financial fraud detection modules.
@@ -43,9 +43,9 @@ prompt= ChatPromptTemplate.from_messages([
     ("placeholder","{agent_scratchpad}"),
 ])
 
-llm= ChatGroq(
-    model= 'llama-3.3-70b-versatile',
-    api_key=groq_api_key,
+llm= ChatGoogleGenerativeAI(
+    model= 'gemini-2.5-flash',
+    google_api_key=gemini_api_key,
     temperature=0
 )
 
