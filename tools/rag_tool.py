@@ -16,7 +16,7 @@ load_dotenv()
 
 groq_api_key= os.getenv("GROQ_API_KEY")
 
-client= Groq()
+client= Groq(apikey=groq_api_key)
 
 #loading documents
 pdf_loader= PyPDFLoader("ey-worldwide-corporate-tax-guide.pdf") 
