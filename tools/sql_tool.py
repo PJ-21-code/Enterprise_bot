@@ -35,7 +35,7 @@ You have access to a table named `transactions` with the following columns:
 4. **Data Privacy & Safety:** Do not expose sensitive database metadata or internal schema implementation details beyond what is required to answer the financial query.
 
 User Request: {input}
-database schema: {database_schema}
+database schema: {{database_schema}}
 """
 
 full_prompt = ChatPromptTemplate.from_messages(

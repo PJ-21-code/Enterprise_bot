@@ -99,19 +99,16 @@ def rag_tool(user_query: str):
       context_list= [data.page_content for data in relevant_document_chunks]
       context_for_query= ". ".join(context_list)
 
-      prompt= [
-         {"role":"system","content": system_message},
-         {"role":"user","content":user_message_template.format(
-           context= context_for_query,
-           question= user_query
-           )}
-      ]
+      user_prompt = user_message_template.format(
+        context=context_for_query, question=user_query
+        )
     
       response= client.models.generate_content(
-            model="gemni-2.5-flash",
-            contents=prompt,
+            model="gemini-2.5-flash",
+            contents=user_prompt,
             config=types.GenerateContentConfig(
-            temperature=0,
+               system_instruction=system_message,
+               temperature=0,
             ),
         )
 
