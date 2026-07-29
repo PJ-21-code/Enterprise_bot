@@ -8,15 +8,18 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,PyPDFDirectoryLoader
 from langchain_chroma import Chroma
 from groq import Groq, RateLimitError
+from google import genai
+from google.genai import types
+from google.genai import errors
 from dotenv import load_dotenv
 from langchain_core.tools import tool
 from tenacity import retry, retry_if_exception_type, wait_exponential, stop_after_attempt
 
 load_dotenv()
 
-groq_api_key= os.getenv("GROQ_API_KEY")
+gemini_api_key= os.getenv("GEMINI_API_KEY")
 
-client= Groq(api_key=groq_api_key)
+client= genai.Client(api_key=gemini_api_key)
 
 #loading documents
 pdf_loader= PyPDFLoader("ey-worldwide-corporate-tax-guide.pdf") 
@@ -67,11 +70,14 @@ Here are some documents that are relevant to the question mentioned below.
 {question}
 
 """
-
+def is_rate_limit_error(exception):
+  if isinstance(exception, errors.APIError) and exception.code == 429:
+    return True
+  return False
 
 @tool
 @retry(
-    retry= retry_if_exception_type(RateLimitError),
+    retry= retry_if_exception_type(errors.APIError) & retry_if_exception_type(is_rate_limit_error),
     wait= wait_exponential(multiplier=1,min=1,max=10),
     stop= stop_after_attempt(4)
 )
@@ -101,19 +107,28 @@ def rag_tool(user_query: str):
            )}
       ]
     
-      response= client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=prompt,
-            temperature=0
+      response= client.models.generate_content(
+            model="gemni-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+            temperature=0,
+            ),
         )
 
-      predictions= response.choices[0].message.content
+      predictions= response.text
       return predictions
-    except RateLimitError:
-       raise
-    except Exception as e:
-        predictions= f"Sorry I encounter the following error: {str(e)}"
+    except errors.APIError as e:
 
-        return predictions
+        if e.code == 429:
+          raise  
+        else:
+          predictions = (
+          f"Sorry, I encountered an API error (Code {e.code}): {e.message}"
+        )
+          return predictions
+
+    except Exception as e:
+         predictions = f"Sorry, I encountered the following error: {str(e)}"
+         return predictions
     
 

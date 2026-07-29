@@ -16,3 +16,4 @@ langchain-chroma
 langchain-groq
 detoxify
 chainlit
+google-genai
