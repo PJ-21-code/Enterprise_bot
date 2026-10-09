@@ -3,6 +3,7 @@ import pandas as pd
 import tiktoken
 import gdown
 import os
+import torch
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.document_loaders import PyPDFLoader,PyPDFDirectoryLoader
@@ -26,8 +27,8 @@ pdf_loader= PyPDFLoader("ey-worldwide-corporate-tax-guide.pdf")
 pages= pdf_loader.load()
 full_text= " ".join([page.page_content for page in pages])
 
-
-embeddings= HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+embeddings= HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs= {"device":device})
 text_splitter= SemanticChunker(embeddings=embeddings)
 
 semantic_chunks= text_splitter.create_documents([full_text])
