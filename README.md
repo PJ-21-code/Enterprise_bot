@@ -336,6 +336,3 @@ If activating the virtual environment yields an execution policy error, run:
 
 ---
 
-## 📜 License
-
-This project is created for enterprise problem-solving and educational demonstrations. Consult the repository maintainer for specific licensing terms.
