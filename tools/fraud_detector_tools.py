@@ -1,94 +1,243 @@
+
+from decimal import Decimal, InvalidOperation
+from collections import Counter
+from datetime import timedelta
+
 import numpy as np
 import pandas as pd
 from langchain_core.tools import tool
 
+
 @tool
-def calculate_variance(actual: list, budgeted: float) -> dict:
-    """Calculates variance statistics for financial audit analysis."""
-    actual_total= np.sum(actual)
-    budgeted_total= budgeted*len(actual)
-    diff= actual_total- budgeted_total
-    percent= (diff/budgeted_total)*100 if budgeted_total!=0 else 0
-    is_high_risk= abs(percent) >= 10
+def calculate_variance(actual: list[float],budgeted_per_transaction: float) -> dict:
+    """Compare actual transaction amounts against a budget per transaction.
+    Returns total actual, total budget, difference, percentage change,
+    and a high-risk flag when absolute variance is at least 10 percent.
+    """
+    if not actual:
+        return {
+            "error": "No actual transaction amounts provided."
+        }
+
+    try:
+        amounts = [float(x) for x in actual]
+        budget = float(budgeted_per_transaction)
+    except (TypeError, ValueError):
+        return {"error": "Amounts and budget must be numeric."}
+
+    if not np.isfinite(budget) or not all(np.isfinite(x) for x in amounts):
+        return {"error": "Amounts and budget must be finite numbers."}
+
+    actual_total = sum(amounts)
+    budget_total = budget * len(amounts)
+    difference = actual_total - budget_total
+
+    percentage = (
+        difference / abs(budget_total) * 100
+        if budget_total != 0
+        else None
+    )
+
+    high_risk = (
+        abs(percentage) >= 10
+        if percentage is not None
+        else None
+    )
 
     return {
-        "difference": round(diff,2),
-        "percentage change": round(percent,2),
-        "High risk flag": "Yes" if is_high_risk  else "No"
+        "transaction_count": len(amounts),
+        "actual_total": round(actual_total, 2),
+        "budget_total": round(budget_total, 2),
+        "difference": round(difference, 2),
+        "percentage_change": (
+            round(percentage, 2)
+            if percentage is not None else None
+        ),
+        "high_risk_flag": (
+            "Yes" if high_risk else "No"
+        ) if high_risk is not None else "Cannot determine"
     }
 
 
 @tool
-def benford_finance_fraud_detector(transaction_amounts: list) ->dict:
+def benford_finance_fraud_detector(transaction_amounts: list[float]) -> dict:
+    """Analyze the first significant digit of financial amounts against
+    Benford's Law. Returns observed and expected distributions and a
+    heuristic anomaly flag. A flag is not proof of fraud.
     """
-    Takes a list of financial transaction numbers,
-    analyzes their leading digits, and checks against Benford's Law.
-    """
-    leading_digits = [int(str(abs(amt)).strip("0.")[0]) for amt in transaction_amounts if amt != 0]
+    if not transaction_amounts:
+        return {"error": "No transaction amounts provided."}
 
-    df = pd.DataFrame({"digit": leading_digits})
-    counts = df["digit"].value_counts().sort_index()
-    total = len(leading_digits)
+    digit_counts = Counter()
+    skipped_zero = 0
 
-    actual_proportion = (counts / total).to_dict()
+    for amount in transaction_amounts:
+        try:
+            value = Decimal(str(amount))
+        except (InvalidOperation, ValueError):
+            return {"error": f"Invalid transaction amount: {amount}"}
 
-    expected_proportion = {
-      d: np.log10(1 + 1 / d) for d in range(1, 10)
-     }
+        if not value.is_finite():
+            return {"error": "Amounts must be finite numbers."}
+
+        value = abs(value)
+
+        if value == 0:
+            skipped_zero += 1
+            continue
+
+        # Decimal normalization handles small decimals and scientific notation.
+        first_digit = int(value.normalize().as_tuple().digits[0])
+
+        if 1 <= first_digit <= 9:
+            digit_counts[first_digit] += 1
+
+    total = sum(digit_counts.values())
+
+    if total == 0:
+        return {
+            "error": "No non-zero transaction amounts to analyze.",
+            "zero_amounts_skipped": skipped_zero
+        }
+
+    expected = {
+        d: float(np.log10(1 + 1 / d))
+        for d in range(1, 10)
+    }
+
+    observed = {
+        d: digit_counts[d] / total
+        for d in range(1, 10)
+    }
 
     discrepancy = sum(
-      abs(actual_proportion.get(d, 0) - expected_proportion[d]) for d in range(1, 10)
-     )
+        abs(observed[d] - expected[d])
+        for d in range(1, 10)
+    )
 
-    is_suspicious = (discrepancy > 0.15)  
+    # This is a configurable heuristic, not a statistical significance test.
+    threshold = 0.15
 
     return {
-      "total_transactions_analyzed": total,
-      "discrepancy_score": round(discrepancy, 4),
-      "fraud_risk_flag": is_suspicious,
-      "observed_distribution": actual_proportion,
+        "total_transactions_analyzed": total,
+        "zero_amounts_skipped": skipped_zero,
+        "discrepancy_score": round(discrepancy, 4),
+        "heuristic_threshold": threshold,
+        "anomaly_flag": discrepancy > threshold,
+        "observed_distribution": {
+            d: round(observed[d], 4) for d in range(1, 10)
+        },
+        "expected_distribution": {
+            d: round(expected[d], 4) for d in range(1, 10)
+        },
+        "interpretation": (
+            "Potential digit-distribution anomaly; investigate further."
+            if discrepancy > threshold
+            else "No anomaly detected by this heuristic."
+        )
     }
-    
+
 
 @tool
-def detect_split_transactions(transaction_df= pd.DataFrame, threshold :float= 10000.0, window_hours: int=36):
-    """Detects potential split transactions designed to bypass approval limits.
-
-    Parameters:
-    - transactions_df: DataFrame with columns ['vendor_id', 'amount',
-    'timestamp']
-    - threshold: The company policy limit that requires approval (e.g., $10,000)
-    - window_hours: Time window to look for clustered transactions (e.g., 48
-    hours)
+def detect_split_transactions(transactions: list[dict],threshold: float = 10000.0,window_hours: int = 36) -> dict:
+    """Flag groups of two or more transactions from the same vendor,
+    each between 80% and 100% of the approval threshold, occurring
+    within the specified time window. Input records must contain
+    vendor_id, amount, and timestamp. This is a screening heuristic.
     """
+    required = {"vendor_id", "amount", "timestamp"}
 
-    transaction_df['timestamp']= pd.to_datetime(transaction_df['timestamp'])
-    lower_bound= threshold*0.80
+    if not transactions:
+        return {
+            "total_suspicious_clusters_found": 0,
+            "details": [],
+            "message": "No transactions provided."
+        }
 
-    suspicious_slice= transaction_df[(transaction_df['amount']>= lower_bound) & (transaction_df['amount']<= threshold)].copy()
+    if not np.isfinite(threshold) or threshold <= 0:
+        return {"error": "Threshold must be a positive finite number."}
 
-    flagged_clusters=[]
+    if window_hours <= 0:
+        return {"error": "window_hours must be positive."}
 
-    for vendor_id, group in suspicious_slice.groupby("vendor_id"):
+    df = pd.DataFrame(transactions)
 
-        group = group.sort_values("timestamp")
+    missing = required - set(df.columns)
+    if missing:
+        return {
+            "error": f"Missing required fields: {sorted(missing)}"
+        }
 
-        group['time_diff']= group['timestamp'].diff().dt.total_seconds()/3600
+    try:
+        df["amount"] = pd.to_numeric(df["amount"], errors="raise")
+        df["timestamp"] = pd.to_datetime(
+            df["timestamp"], errors="raise", utc=True
+        )
+    except (ValueError, TypeError, OverflowError):
+        return {"error": "Invalid amount or timestamp in transactions."}
 
-        cluster= group[(group['time_diff']<= window_hours) | (group['time_diff'].isnull())]
+    if not np.isfinite(df["amount"].to_numpy(dtype=float)).all():
+        return {"error": "Transaction amounts must be finite."}
 
-        if(len(cluster)>=2):
-            total_split_amount= cluster['amount'].sum()
+    # Keep amounts in the range commonly examined for possible splitting.
+    lower_bound = threshold * 0.80
 
-            flagged_clusters.append({
-                "vendor_id": vendor_id,
-                "transaction_count": len(cluster),
-                "total_amount": round(total_split_amount, 2),
-                "individual_amounts": cluster["amount"].tolist(),
-                "timestamps": cluster["timestamp"].astype(str).tolist(),
-            })
+    candidates = df[
+        (df["amount"] >= lower_bound)
+        & (df["amount"] <= threshold)
+    ].copy()
 
-    return{
+    candidates = candidates.sort_values("timestamp")
+    flagged_clusters = []
+    window = timedelta(hours=window_hours)
+
+    for vendor_id, group in candidates.groupby(
+        "vendor_id", dropna=False, sort=False
+    ):
+        records = group.to_dict("records")
+        start = 0
+
+        # Form non-overlapping time windows, measured from the first
+        # transaction in each window, not from the preceding transaction.
+        while start < len(records):
+            end = start + 1
+
+            while (
+                end < len(records)
+                and records[end]["timestamp"]
+                - records[start]["timestamp"] <= window
+            ):
+                end += 1
+
+            cluster = records[start:end]
+
+            if len(cluster) >= 2:
+                flagged_clusters.append({
+                    "vendor_id": (
+                        None if pd.isna(vendor_id) else str(vendor_id)
+                    ),
+                    "transaction_count": len(cluster),
+                    "total_amount": round(
+                        sum(float(r["amount"]) for r in cluster), 2
+                    ),
+                    "individual_amounts": [
+                        float(r["amount"]) for r in cluster
+                    ],
+                    "timestamps": [
+                        r["timestamp"].isoformat() for r in cluster
+                    ],
+                    "approval_threshold": threshold,
+                    "requires_review": True
+                })
+
+            start = end
+
+    return {
+        "candidate_transactions_analyzed": len(candidates),
         "total_suspicious_clusters_found": len(flagged_clusters),
         "details": flagged_clusters,
+        "limitation": (
+            "Flags are screening indicators, not proof of intentional "
+            "approval-limit evasion. Review all vendor transactions."
+        )
     }
