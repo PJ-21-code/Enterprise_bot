@@ -4,6 +4,33 @@ import json
 import chainlit as cl
 from agent.master_agent import chat_with_enterprise_agent
 
+
+def extract_response_text(response):
+    """Extract clean user-facing text from an agent response.
+
+    Handles the various shapes that AgentExecutor / RunnableWithMessageHistory
+    can place in response['output']:
+      1. str                        → returned as-is (normal RAG / SQL answers)
+      2. dict with type='text'      → returns the 'text' value, dropping metadata
+                                      like 'extras', 'signature', 'index'
+      3. list of mixed str / dicts  → extracts text from each item and joins them
+      4. dict without a 'text' key  → formatted as readable indented JSON
+      5. any other type             → converted with str()
+    """
+    if isinstance(response, str):
+        return response
+
+    if isinstance(response, dict):
+        if response.get("type") == "text" and "text" in response:
+            return response["text"]
+        return json.dumps(response, indent=2, default=str)
+
+    if isinstance(response, list):
+        parts = [extract_response_text(item) for item in response]
+        return "\n\n".join(parts)
+
+    return str(response)
+
 @cl.on_chat_start
 async def start_chat():
   # Assign a unique session identifier for Chainlit memory tracking
@@ -47,7 +74,7 @@ async def main(message: cl.Message):
     try:
        agent_response = chat_with_enterprise_agent(user_query, session_id)
 
-       msg.content = str(agent_response) if not isinstance(agent_response, str) else agent_response
+       msg.content = extract_response_text(agent_response)
        await msg.update()
 
     except ValueError as ve:
