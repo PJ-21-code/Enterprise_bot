@@ -1,0 +1,534 @@
+{
+  "metadata": {
+    "timestamp": "2026-11-19T17:43:36.272289Z",
+    "database": "./benchmarks/synthetic_finance_1000.db",
+    "total_records": 1000,
+    "total_accounts": 50
+  },
+  "sql_benchmark": {
+    "total_queries": 15,
+    "successful_queries": 15,
+    "failed_queries": 0,
+    "success_rate_percent": 100.0,
+    "latency_ms": {
+      "mean": 0.61,
+      "p50": 0.511,
+      "p95": 1.138,
+      "min": 0.158,
+      "max": 1.501
+    },
+    "query_details": [
+      {
+        "id": "SQL01",
+        "category": "Basic Aggregation",
+        "name": "Total Record Count",
+        "query": "SELECT COUNT(*) FROM transactions;",
+        "status": "SUCCESS",
+        "returned_rows": 1,
+        "expected_rows": 1,
+        "median_latency_ms": 0.158,
+        "sample_output": "(1000,)"
+      },
+      {
+        "id": "SQL02",
+        "category": "Basic Aggregation",
+        "name": "Total Ledger Volume",
+        "query": "SELECT SUM(amount) FROM transactions;",
+        "status": "SUCCESS",
+        "returned_rows": 1,
+        "expected_rows": 1,
+        "median_latency_ms": 0.19,
+        "sample_output": "(1451094.28,)"
+      },
+      {
+        "id": "SQL03",
+        "category": "Group Aggregation",
+        "name": "Breakdown by Transaction Type",
+        "query": "SELECT type, COUNT(*), SUM(amount), AVG(amount) FROM transactions GROUP BY type ORDER BY type;",
+        "status": "SUCCESS",
+        "returned_rows": 3,
+        "expected_rows": 3,
+        "median_latency_ms": 0.966,
+        "sample_output": "('credit', 257, 267800.95, 1042.0270428015565)"
+      },
+      {
+        "id": "SQL04",
+        "category": "Ranking & Sorting",
+        "name": "Top 5 Spending Accounts (Debits)",
+        "query": "SELECT customer_id, SUM(amount) AS total_debit FROM transactions WHERE type='debit' GROUP BY customer_id ORDER BY total_debit DESC LIMIT 5;",
+        "status": "SUCCESS",
+        "returned_rows": 5,
+        "expected_rows": 5,
+        "median_latency_ms": 0.368,
+        "sample_output": "(145, 33799.700000000004)"
+      },
+      {
+        "id": "SQL05",
+        "category": "Time Series Analysis",
+        "name": "Monthly Volume and Count",
+        "query": "SELECT strftime('%Y-%m', date) AS month, COUNT(*), SUM(amount) FROM transactions GROUP BY month ORDER BY month;",
+        "status": "SUCCESS",
+        "returned_rows": 6,
+        "expected_rows": 6,
+        "median_latency_ms": 0.899,
+        "sample_output": "('2026-01', 167, 217426.67)"
+      },
+      {
+        "id": "SQL06",
+        "category": "Threshold Filtering",
+        "name": "High-Value Transactions (> $10k)",
+        "query": "SELECT COUNT(*), SUM(amount) FROM transactions WHERE amount > 10000.0;",
+        "status": "SUCCESS",
+        "returned_rows": 1,
+        "expected_rows": 1,
+        "median_latency_ms": 0.193,
+        "sample_output": "(10, 137655.5)"
+      },
+      {
+        "id": "SQL07",
+        "category": "Candidate Range Screening",
+        "name": "Approval-Limit Evasion Range ($8k - $10k)",
+        "query": "SELECT COUNT(*), SUM(amount) FROM transactions WHERE amount BETWEEN 8000.0 AND 10000.0;",
+        "status": "SUCCESS",
+        "returned_rows": 1,
+        "expected_rows": 1,
+        "median_latency_ms": 0.511,
+        "sample_output": "(34, 301600.0)"
+      },
+      {
+        "id": "SQL08",
+        "category": "Entity Grouping & Having",
+        "name": "Accounts with Multiple Candidate Transactions",
+        "query": "SELECT customer_id, COUNT(*) AS txn_count FROM transactions WHERE amount BETWEEN 8000.0 AND 10000.0 GROUP BY customer_id HAVING txn_count >= 2;",
+        "status": "SUCCESS",
+        "returned_rows": 13,
+        "expected_rows": 13,
+        "median_latency_ms": 0.507,
+        "sample_output": "(105, 2)"
+      },
+      {
+        "id": "SQL09",
+        "category": "Statistical Summary",
+        "name": "Min, Max, and Average Statistics",
+        "query": "SELECT MIN(amount), MAX(amount), AVG(amount) FROM transactions;",
+        "status": "SUCCESS",
+        "returned_rows": 1,
+        "expected_rows": 1,
+        "median_latency_ms": 0.825,
+        "sample_output": "(23.66, 24213.29, 1451.09428)"
+      },
+      {
+        "id": "SQL10",
+        "category": "Date Range by Category",
+        "name": "Earliest and Latest Dates per Type",
+        "query": "SELECT type, MIN(date), MAX(date) FROM transactions GROUP BY type;",
+        "status": "SUCCESS",
+        "returned_rows": 3,
+        "expected_rows": 3,
+        "median_latency_ms": 1.501,
+        "sample_output": "('credit', '2026-01-01 20:28:11', '2026-06-30 11:16:06')"
+      },
+      {
+        "id": "SQL11",
+        "category": "Distinct Entity Count",
+        "name": "Unique Customer Account Count",
+        "query": "SELECT COUNT(DISTINCT customer_id) FROM transactions;",
+        "status": "SUCCESS",
+        "returned_rows": 1,
+        "expected_rows": 1,
+        "median_latency_ms": 0.982,
+        "sample_output": "(50,)"
+      },
+      {
+        "id": "SQL12",
+        "category": "Customer Investigation",
+        "name": "Customer 105 High-Value History",
+        "query": "SELECT date, amount, type, description FROM transactions WHERE customer_id = 105 AND amount >= 8000.0 ORDER BY date;",
+        "status": "SUCCESS",
+        "returned_rows": 2,
+        "expected_rows": 2,
+        "median_latency_ms": 0.533,
+        "sample_output": "('2026-01-04 16:01:00', 8500.0, 'transfer', 'Contractor software payment tranche (Tranche 1/2)')"
+      },
+      {
+        "id": "SQL13",
+        "category": "Conditional Aggregation",
+        "name": "Net Debit vs Credit per Account",
+        "query": "SELECT customer_id, SUM(CASE WHEN type='debit' THEN amount ELSE 0 END) AS total_debit, SUM(CASE WHEN type='credit' THEN amount ELSE 0 END) AS total_credit FROM transactions GROUP BY customer_id HAVING total_debit > total_credit LIMIT 10;",
+        "status": "SUCCESS",
+        "returned_rows": 10,
+        "expected_rows": 10,
+        "median_latency_ms": 0.451,
+        "sample_output": "(101, 8076.03, 339.06)"
+      },
+      {
+        "id": "SQL14",
+        "category": "Description Categorization",
+        "name": "Top 5 Recurring Transaction Descriptions",
+        "query": "SELECT description, COUNT(*) AS cnt FROM transactions GROUP BY description ORDER BY cnt DESC LIMIT 5;",
+        "status": "SUCCESS",
+        "returned_rows": 5,
+        "expected_rows": 5,
+        "median_latency_ms": 0.437,
+        "sample_output": "('Client advisory service retainer payment', 60)"
+      },
+      {
+        "id": "SQL15",
+        "category": "Subquery Analytics",
+        "name": "Average Daily Transaction Total",
+        "query": "SELECT AVG(daily_total) FROM (SELECT date(date) as day, SUM(amount) as daily_total FROM transactions GROUP BY day);",
+        "status": "SUCCESS",
+        "returned_rows": 1,
+        "expected_rows": 1,
+        "median_latency_ms": 0.631,
+        "sample_output": "(8061.634888888889,)"
+      }
+    ]
+  },
+  "split_transaction_benchmark": {
+    "dataset_size": 1000,
+    "candidate_txns_analyzed": 34,
+    "approval_threshold": 10000.0,
+    "window_hours": 36,
+    "metrics": {
+      "ground_truth_clusters": 12,
+      "detected_clusters": 12,
+      "true_positives": 12,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "precision_percent": 100.0,
+      "recall_percent": 100.0,
+      "f1_score": 1.0,
+      "negative_control_rejection_rate": "100.0% (5/5 rejected)"
+    },
+    "latency_ms": {
+      "mean": 12.45,
+      "p50": 8.94,
+      "p95": 19.15,
+      "min": 6.09,
+      "max": 63.04
+    },
+    "detected_clusters": [
+      {
+        "vendor_id": "105",
+        "transaction_count": 2,
+        "total_amount": 17700.0,
+        "individual_amounts": [
+          8500.0,
+          9200.0
+        ],
+        "timestamps": [
+          "2026-01-04T16:01:00+00:00",
+          "2026-01-05T06:05:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "112",
+        "transaction_count": 3,
+        "total_amount": 26500.0,
+        "individual_amounts": [
+          8100.0,
+          8900.0,
+          9500.0
+        ],
+        "timestamps": [
+          "2026-01-18T16:13:00+00:00",
+          "2026-01-19T06:14:00+00:00",
+          "2026-01-19T20:32:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "118",
+        "transaction_count": 2,
+        "total_amount": 19750.0,
+        "individual_amounts": [
+          9950.0,
+          9800.0
+        ],
+        "timestamps": [
+          "2026-02-01T18:38:00+00:00",
+          "2026-02-02T00:01:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "123",
+        "transaction_count": 2,
+        "total_amount": 16650.0,
+        "individual_amounts": [
+          8250.0,
+          8400.0
+        ],
+        "timestamps": [
+          "2026-02-15T17:35:00+00:00",
+          "2026-02-16T13:12:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "130",
+        "transaction_count": 4,
+        "total_amount": 34950.0,
+        "individual_amounts": [
+          8600.0,
+          8800.0,
+          9100.0,
+          8450.0
+        ],
+        "timestamps": [
+          "2026-03-01T17:45:00+00:00",
+          "2026-03-02T04:21:00+00:00",
+          "2026-03-02T15:04:00+00:00",
+          "2026-03-03T01:34:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "134",
+        "transaction_count": 2,
+        "total_amount": 17200.0,
+        "individual_amounts": [
+          8050.0,
+          9150.0
+        ],
+        "timestamps": [
+          "2026-03-15T17:26:00+00:00",
+          "2026-03-16T11:14:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "139",
+        "transaction_count": 2,
+        "total_amount": 17650.0,
+        "individual_amounts": [
+          8900.0,
+          8750.0
+        ],
+        "timestamps": [
+          "2026-03-29T16:28:00+00:00",
+          "2026-03-30T00:37:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "141",
+        "transaction_count": 3,
+        "total_amount": 25900.0,
+        "individual_amounts": [
+          8300.0,
+          9400.0,
+          8200.0
+        ],
+        "timestamps": [
+          "2026-04-12T20:17:00+00:00",
+          "2026-04-13T07:00:00+00:00",
+          "2026-04-13T18:10:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "144",
+        "transaction_count": 2,
+        "total_amount": 19350.0,
+        "individual_amounts": [
+          9600.0,
+          9750.0
+        ],
+        "timestamps": [
+          "2026-04-26T16:44:00+00:00",
+          "2026-04-27T22:27:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "147",
+        "transaction_count": 2,
+        "total_amount": 17350.0,
+        "individual_amounts": [
+          8400.0,
+          8950.0
+        ],
+        "timestamps": [
+          "2026-05-10T20:21:00+00:00",
+          "2026-05-11T08:17:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "149",
+        "transaction_count": 2,
+        "total_amount": 17500.0,
+        "individual_amounts": [
+          8150.0,
+          9350.0
+        ],
+        "timestamps": [
+          "2026-05-24T19:09:00+00:00",
+          "2026-05-25T19:13:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      },
+      {
+        "vendor_id": "150",
+        "transaction_count": 3,
+        "total_amount": 26950.0,
+        "individual_amounts": [
+          9000.0,
+          8700.0,
+          9250.0
+        ],
+        "timestamps": [
+          "2026-06-07T16:21:00+00:00",
+          "2026-06-08T00:06:00+00:00",
+          "2026-06-08T08:05:00+00:00"
+        ],
+        "approval_threshold": 10000.0,
+        "requires_review": true
+      }
+    ]
+  },
+  "benford_law_benchmark": [
+    {
+      "dataset_name": "Dataset A (Natural Log-Normal)",
+      "sample_size": 1000,
+      "discrepancy_score": 0.0677,
+      "heuristic_threshold": 0.15,
+      "anomaly_flag": false,
+      "expected_anomaly": false,
+      "classification_status": "CORRECT",
+      "median_latency_ms": 1.52,
+      "observed_distribution": {
+        "1": 0.283,
+        "2": 0.179,
+        "3": 0.147,
+        "4": 0.088,
+        "5": 0.082,
+        "6": 0.07,
+        "7": 0.061,
+        "8": 0.047,
+        "9": 0.043
+      },
+      "expected_distribution": {
+        "1": 0.301,
+        "2": 0.1761,
+        "3": 0.1249,
+        "4": 0.0969,
+        "5": 0.0792,
+        "6": 0.0669,
+        "7": 0.058,
+        "8": 0.0512,
+        "9": 0.0458
+      }
+    },
+    {
+      "dataset_name": "Dataset B (Fabricated Uniform)",
+      "sample_size": 1000,
+      "discrepancy_score": 0.5901,
+      "heuristic_threshold": 0.15,
+      "anomaly_flag": true,
+      "expected_anomaly": true,
+      "classification_status": "CORRECT",
+      "median_latency_ms": 1.48,
+      "observed_distribution": {
+        "1": 0.11,
+        "2": 0.102,
+        "3": 0.095,
+        "4": 0.114,
+        "5": 0.111,
+        "6": 0.13,
+        "7": 0.115,
+        "8": 0.12,
+        "9": 0.103
+      },
+      "expected_distribution": {
+        "1": 0.301,
+        "2": 0.1761,
+        "3": 0.1249,
+        "4": 0.0969,
+        "5": 0.0792,
+        "6": 0.0669,
+        "7": 0.058,
+        "8": 0.0512,
+        "9": 0.0458
+      }
+    },
+    {
+      "dataset_name": "Dataset C (Threshold Clustered)",
+      "sample_size": 1000,
+      "discrepancy_score": 1.4964,
+      "heuristic_threshold": 0.15,
+      "anomaly_flag": true,
+      "expected_anomaly": true,
+      "classification_status": "CORRECT",
+      "median_latency_ms": 1.51,
+      "observed_distribution": {
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.326,
+        "5": 0.0,
+        "6": 0.0,
+        "7": 0.173,
+        "8": 0.17,
+        "9": 0.331
+      },
+      "expected_distribution": {
+        "1": 0.301,
+        "2": 0.1761,
+        "3": 0.1249,
+        "4": 0.0969,
+        "5": 0.0792,
+        "6": 0.0669,
+        "7": 0.058,
+        "8": 0.0512,
+        "9": 0.0458
+      }
+    },
+    {
+      "dataset_name": "Dataset D (Synthetic Database)",
+      "sample_size": 1000,
+      "discrepancy_score": 0.102,
+      "heuristic_threshold": 0.15,
+      "anomaly_flag": false,
+      "expected_anomaly": false,
+      "classification_status": "CORRECT",
+      "median_latency_ms": 1.41,
+      "observed_distribution": {
+        "1": 0.286,
+        "2": 0.16,
+        "3": 0.133,
+        "4": 0.081,
+        "5": 0.084,
+        "6": 0.063,
+        "7": 0.063,
+        "8": 0.072,
+        "9": 0.058
+      },
+      "expected_distribution": {
+        "1": 0.301,
+        "2": 0.1761,
+        "3": 0.1249,
+        "4": 0.0969,
+        "5": 0.0792,
+        "6": 0.0669,
+        "7": 0.058,
+        "8": 0.0512,
+        "9": 0.0458
+      }
+    }
+  ]
+}

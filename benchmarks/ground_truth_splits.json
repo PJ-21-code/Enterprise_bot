@@ -1,0 +1,193 @@
+{
+  "metadata": {
+    "dataset_name": "synthetic_finance_1000",
+    "total_transactions": 1000,
+    "total_accounts": 50,
+    "account_range": [
+      101,
+      150
+    ],
+    "approval_threshold": 10000.0,
+    "candidate_range": [
+      8000.0,
+      10000.0
+    ],
+    "window_hours": 36,
+    "total_ground_truth_clusters": 12
+  },
+  "ground_truth_clusters": [
+    {
+      "cluster_id": "C01",
+      "customer_id": 105,
+      "transaction_count": 2,
+      "amounts": [
+        8500.0,
+        9200.0
+      ],
+      "total_amount": 17700.0,
+      "start_time": "2026-01-04 16:01:00",
+      "end_time": "2026-01-05 06:05:00",
+      "time_span_hours": 14,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C02",
+      "customer_id": 112,
+      "transaction_count": 3,
+      "amounts": [
+        8100.0,
+        8900.0,
+        9500.0
+      ],
+      "total_amount": 26500.0,
+      "start_time": "2026-01-18 16:13:00",
+      "end_time": "2026-01-19 20:32:00",
+      "time_span_hours": 28,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C03",
+      "customer_id": 118,
+      "transaction_count": 2,
+      "amounts": [
+        9950.0,
+        9800.0
+      ],
+      "total_amount": 19750.0,
+      "start_time": "2026-02-01 18:38:00",
+      "end_time": "2026-02-02 00:01:00",
+      "time_span_hours": 6,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C04",
+      "customer_id": 123,
+      "transaction_count": 2,
+      "amounts": [
+        8250.0,
+        8400.0
+      ],
+      "total_amount": 16650.0,
+      "start_time": "2026-02-15 17:35:00",
+      "end_time": "2026-02-16 13:12:00",
+      "time_span_hours": 20,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C05",
+      "customer_id": 130,
+      "transaction_count": 4,
+      "amounts": [
+        8600.0,
+        8800.0,
+        9100.0,
+        8450.0
+      ],
+      "total_amount": 34950.0,
+      "start_time": "2026-03-01 17:45:00",
+      "end_time": "2026-03-03 01:34:00",
+      "time_span_hours": 32,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C06",
+      "customer_id": 134,
+      "transaction_count": 2,
+      "amounts": [
+        8050.0,
+        9150.0
+      ],
+      "total_amount": 17200.0,
+      "start_time": "2026-03-15 17:26:00",
+      "end_time": "2026-03-16 11:14:00",
+      "time_span_hours": 18,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C07",
+      "customer_id": 139,
+      "transaction_count": 2,
+      "amounts": [
+        8900.0,
+        8750.0
+      ],
+      "total_amount": 17650.0,
+      "start_time": "2026-03-29 16:28:00",
+      "end_time": "2026-03-30 00:37:00",
+      "time_span_hours": 8,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C08",
+      "customer_id": 141,
+      "transaction_count": 3,
+      "amounts": [
+        8300.0,
+        9400.0,
+        8200.0
+      ],
+      "total_amount": 25900.0,
+      "start_time": "2026-04-12 20:17:00",
+      "end_time": "2026-04-13 18:10:00",
+      "time_span_hours": 22,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C09",
+      "customer_id": 144,
+      "transaction_count": 2,
+      "amounts": [
+        9600.0,
+        9750.0
+      ],
+      "total_amount": 19350.0,
+      "start_time": "2026-04-26 16:44:00",
+      "end_time": "2026-04-27 22:27:00",
+      "time_span_hours": 30,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C10",
+      "customer_id": 147,
+      "transaction_count": 2,
+      "amounts": [
+        8400.0,
+        8950.0
+      ],
+      "total_amount": 17350.0,
+      "start_time": "2026-05-10 20:21:00",
+      "end_time": "2026-05-11 08:17:00",
+      "time_span_hours": 12,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C11",
+      "customer_id": 149,
+      "transaction_count": 2,
+      "amounts": [
+        8150.0,
+        9350.0
+      ],
+      "total_amount": 17500.0,
+      "start_time": "2026-05-24 19:09:00",
+      "end_time": "2026-05-25 19:13:00",
+      "time_span_hours": 24,
+      "requires_review": true
+    },
+    {
+      "cluster_id": "C12",
+      "customer_id": 150,
+      "transaction_count": 3,
+      "amounts": [
+        9000.0,
+        8700.0,
+        9250.0
+      ],
+      "total_amount": 26950.0,
+      "start_time": "2026-06-07 16:21:00",
+      "end_time": "2026-06-08 08:05:00",
+      "time_span_hours": 16,
+      "requires_review": true
+    }
+  ]
+}
