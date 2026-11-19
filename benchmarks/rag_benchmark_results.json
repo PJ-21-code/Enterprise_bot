@@ -1,0 +1,700 @@
+{
+  "benchmark_metadata": {
+    "timestamp": "2026-11-19T17:23:49Z",
+    "total_queries": 25,
+    "successful_queries": 25,
+    "failed_queries": 0,
+    "compute_device": "cuda",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "retrieval_k": 5
+  },
+  "production_retrieval_rates": {
+    "hit_at_1_count": 13,
+    "hit_at_1_rate_percent": 52.0,
+    "hit_at_3_count": 13,
+    "hit_at_3_rate_percent": 52.0,
+    "hit_at_5_count": 13,
+    "hit_at_5_rate_percent": 52.0
+  },
+  "deduplicated_retrieval_rates": {
+    "hit_at_1_count": 13,
+    "hit_at_1_rate_percent": 52.0,
+    "hit_at_3_count": 16,
+    "hit_at_3_rate_percent": 64.0,
+    "hit_at_5_count": 16,
+    "hit_at_5_rate_percent": 64.0
+  },
+  "latency_ms": {
+    "mean": 9.96,
+    "p50": 8.99,
+    "p95": 14.84,
+    "min": 7.83,
+    "max": 19.0
+  },
+  "query_details": [
+    {
+      "id": "Q01",
+      "jurisdiction": "Germany",
+      "topic": "Corporate Income Tax Rate & Solidarity Surcharge",
+      "query": "What is the corporate income tax rate and solidarity surcharge in Germany?",
+      "ground_truth_criteria": [
+        "Germany",
+        "15%",
+        "solidarity surcharge"
+      ],
+      "expected_snippet": "Corporate income tax is levied at a rate of 15% (15.825% including the 5.5% solidarity surcharge).",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 13.19,
+      "top_snippet": "The 10% rate applies in all other cases. 578  \nGermany\ney.com/globaltaxguides\nNational\nPrincipal Tax Contacts\n\uf0ab Alexander Ludwig Reiter  +49 (89) 14331-17344 \n  (resident in Munich) Mobile: +49 (160) "
+    },
+    {
+      "id": "Q02",
+      "jurisdiction": "Canada",
+      "topic": "Corporate Taxation of Resident Corporations",
+      "query": "How are resident corporations taxed in Canada and what is the federal corporate tax rate?",
+      "ground_truth_criteria": [
+        "Canada",
+        "Corporate income tax",
+        "resident in Canada"
+      ],
+      "expected_snippet": "Corporations resident in Canada are subject to Canadian federal tax on their worldwide income.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 19.0,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. Corporations resident in Canada (whether \nowned by Canadians or nonresidents) are taxed on their worldwide \nincome from all sources, including"
+    },
+    {
+      "id": "Q03",
+      "jurisdiction": "France",
+      "topic": "Territorial Principle of Corporate Taxation",
+      "query": "What is the territorial principle of corporate taxation in France?",
+      "ground_truth_criteria": [
+        "France",
+        "territorial principle",
+        "Corporate tax"
+      ],
+      "expected_snippet": "The taxation of French companies is based on a territorial principle. In general, profits earned by a French company are subject to French corporate tax only if they are derived from business activities conducted in France.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 12.6,
+      "top_snippet": "Controlled foreign companies. Under Section 209 B of the French \nTax Code, if French companies subject to corporate income tax in \nFrance have a foreign branch or if they hold, directly or indi -\nrect"
+    },
+    {
+      "id": "Q04",
+      "jurisdiction": "Ireland",
+      "topic": "Corporation Tax Rate on Trading Income",
+      "query": "What is the corporation tax rate on trading income in Ireland?",
+      "ground_truth_criteria": [
+        "Ireland",
+        "Corporation tax",
+        "12.5%"
+      ],
+      "expected_snippet": "Trading income is subject to corporation tax at a rate of 12.5%.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 8.91,
+      "top_snippet": "A 25% rate applies to certain income and to certain \nactivities. For details concerning the tax rates, see Section B. (b) This tax is topped up to this rate as per Global Anti-Base Erosion (GloBE) \nru"
+    },
+    {
+      "id": "Q05",
+      "jurisdiction": "United Kingdom",
+      "topic": "Controlled Foreign Company (CFC) Rules",
+      "query": "What are the controlled foreign company CFC rules in the United Kingdom?",
+      "ground_truth_criteria": [
+        "United Kingdom",
+        "controlled foreign compan"
+      ],
+      "expected_snippet": "The UK CFC rules are targeted anti-avoidance provisions designed to identify and tax artificially diverted UK profits.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 15.26,
+      "top_snippet": "Controlled foreign company rule. For the purposes of the ATAD \nrules, a controlled foreign company (CFC) is an entity or perma-\nnent establishment not resident in Gibraltar that meets the follow-\ning "
+    },
+    {
+      "id": "Q06",
+      "jurisdiction": "Japan",
+      "topic": "Transfer Pricing Documentation Requirements",
+      "query": "What are the transfer pricing documentation rules in Japan?",
+      "ground_truth_criteria": [
+        "Japan",
+        "transfer pricing"
+      ],
+      "expected_snippet": "Japan's transfer pricing legislation is based on the arm's-length principle and OECD transfer pricing guidelines.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 9.14,
+      "top_snippet": "The Bank of Japan controls inbound \nand outbound investments and transfers of money. Transfer pricing. The transfer-pricing law stipulates that pricing \nbetween internationally affiliated entities sho"
+    },
+    {
+      "id": "Q07",
+      "jurisdiction": "Singapore",
+      "topic": "Pioneer Certificate Incentive",
+      "query": "What tax incentives are provided under the Pioneer Certificate Incentive in Singapore?",
+      "ground_truth_criteria": [
+        "Singapore",
+        "Pioneer"
+      ],
+      "expected_snippet": "The Pioneer Certificate Incentive encourages companies to introduce pioneering activities and advanced technology into Singapore.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 9.27,
+      "top_snippet": "\u2022 Investment allowances. \u2022 R&D incentives. An additional 150% tax deduction (effective \nfrom the 2019 year of assessment (Y A) to the 2024 Y A) is \nallowed for certain qualifying R&D expenditure. For "
+    },
+    {
+      "id": "Q08",
+      "jurisdiction": "Brazil",
+      "topic": "Interest on Net Equity (JCP)",
+      "query": "What is the interest on net equity deduction in Brazil?",
+      "ground_truth_criteria": [
+        "Brazil",
+        "interest on net equity"
+      ],
+      "expected_snippet": "Brazilian companies may remunerate shareholders through the payment of interest on net equity (juros sobre o capital pr\u00f3prio, or JCP).",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 8.26,
+      "top_snippet": "Notional interest deduction. Deemed interest on the equity of the \ntaxpaying entity may be deducted from taxable income. Parliament sets the applicable interest rate annually in the finan -\ncial law, "
+    },
+    {
+      "id": "Q09",
+      "jurisdiction": "Mexico",
+      "topic": "Worldwide Income Taxation of Residents",
+      "query": "How are Mexican resident corporations taxed on worldwide income?",
+      "ground_truth_criteria": [
+        "Mexico",
+        "Corporate income tax",
+        "worldwide"
+      ],
+      "expected_snippet": "Corporations resident in Mexico are taxable on their worldwide income.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 8.15,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. Corporations resident in Mexico are tax -\nable on their worldwide income from all sources, including \nprofits from business and property. A no"
+    },
+    {
+      "id": "Q10",
+      "jurisdiction": "South Africa",
+      "topic": "Basis of Corporate Taxation",
+      "query": "What is the basis of corporate taxation in South Africa?",
+      "ground_truth_criteria": [
+        "South Africa",
+        "residence-based",
+        "Company tax"
+      ],
+      "expected_snippet": "A residence-based tax system applies in South Africa. Under domestic law, South African residents are taxed on their worldwide income.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 8.55,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. Business organizations pay South Sudan \ncorporate income (business profits) tax. Business organizations 1692  so uT h  su Da n\nare organizatio"
+    },
+    {
+      "id": "Q11",
+      "jurisdiction": "Netherlands",
+      "topic": "Participation Exemption Requirements",
+      "query": "What are the requirements for the participation exemption in the Netherlands?",
+      "ground_truth_criteria": [
+        "Netherlands",
+        "participation exemption"
+      ],
+      "expected_snippet": "Under the Dutch participation exemption, all corporate income tax-exempt benefits derived from qualifying shareholdings are fully exempt.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 8.89,
+      "top_snippet": "Groups of companies. Under the Dutch fiscal unity regime, a group \nof companies can be treated as one taxpayer for Dutch tax pur -\nposes. The fiscal unity regime has the following characteristics:\n\u2022 T"
+    },
+    {
+      "id": "Q12",
+      "jurisdiction": "Sweden",
+      "topic": "Aggregation of Business Income Sources",
+      "query": "How is business income aggregated for corporate tax in Sweden?",
+      "ground_truth_criteria": [
+        "Sweden",
+        "Corporate income tax",
+        "one source"
+      ],
+      "expected_snippet": "Income from all business activities is aggregated as one source of income for corporate tax purposes.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 8.31,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. Income from all business activities is aggre-\ngated as one source of income \u2014 income from business. In \nprinciple, corporate income tax (CIT) "
+    },
+    {
+      "id": "Q13",
+      "jurisdiction": "Austria",
+      "topic": "Taxation of Resident and Foreign Companies",
+      "query": "How are resident and foreign companies taxed in Austria?",
+      "ground_truth_criteria": [
+        "Austria",
+        "Corporate income tax",
+        "resident in Austria"
+      ],
+      "expected_snippet": "In general, all companies resident in Austria and foreign companies operating in Austria are subject to corporate income tax.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 8.01,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. In general, all companies resident in Austria \nand foreign companies with Austria-source income are subject to \ncorporate income tax. (For the"
+    },
+    {
+      "id": "Q14",
+      "jurisdiction": "Belgium",
+      "topic": "Worldwide Income Principle for Resident Entities",
+      "query": "How are resident companies taxed on worldwide income in Belgium?",
+      "ground_truth_criteria": [
+        "Belgium",
+        "Corporate income tax",
+        "resident companies"
+      ],
+      "expected_snippet": "Resident companies are subject to tax on their annual worldwide income, including distributed and retained profits.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 9.03,
+      "top_snippet": "B. Taxes on corporate income and gains\nCorporate income tax. Resident companies are subject to tax on \ntheir annual worldwide income. Nonresident companies are sub-\nject to tax on their annual Belgian"
+    },
+    {
+      "id": "Q15",
+      "jurisdiction": "Finland",
+      "topic": "Worldwide Corporate Taxation",
+      "query": "Are resident companies in Finland taxed on their worldwide income?",
+      "ground_truth_criteria": [
+        "Finland",
+        "Corporate income tax",
+        "worldwide"
+      ],
+      "expected_snippet": "Companies resident in Finland are taxed on their worldwide income.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 8.66,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. Companies resident in Finland are taxed on \ntheir worldwide income. Nonresident companies are taxed only Fi n l a nD   525\non their Finnish-so"
+    },
+    {
+      "id": "Q16",
+      "jurisdiction": "India",
+      "topic": "Domestic Company Definition",
+      "query": "How is a domestic company defined for corporate tax in India?",
+      "ground_truth_criteria": [
+        "India",
+        "Corporate income tax",
+        "domestic company"
+      ],
+      "expected_snippet": "A domestic company is defined for tax purposes as a company incorporated in India or an Indian business entity.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 9.53,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. A domestic company is defined for tax \npurposes as a company incorporated in India. The definition also \nincludes a company incorporated outsi"
+    },
+    {
+      "id": "Q17",
+      "jurisdiction": "Germany",
+      "topic": "Loss Carryforward and Minimum Taxation",
+      "query": "What are the rules for loss carryforward and minimum taxation in Germany?",
+      "ground_truth_criteria": [
+        "Germany",
+        "loss carryforward"
+      ],
+      "expected_snippet": "Tax losses may be carried forward indefinitely. However, minimum taxation rules apply to the utilization of loss carryforwards.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 10.61,
+      "top_snippet": "These rates may be \nreduced under tax treaties. (h) Loss carryforwards are allowed for corporate income tax purposes only (not \nfor IRAP). Losses may be carried forward indefinitely. Losses can genera"
+    },
+    {
+      "id": "Q18",
+      "jurisdiction": "United States",
+      "topic": "Federal Corporate Income Tax Rate",
+      "query": "What is the federal corporate income tax rate in the United States?",
+      "ground_truth_criteria": [
+        "United States",
+        "21%"
+      ],
+      "expected_snippet": "The federal corporate income tax rate in the United States is a flat 21%.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 8.79,
+      "top_snippet": "The regular corporate income tax rate is 15%. To cal -\nculate corporate income tax, the tax rate is applied to the taxable \nobjects described above divided by 0.85. The tax rate for banking institutio"
+    },
+    {
+      "id": "Q19",
+      "jurisdiction": "Singapore",
+      "topic": "Development and Expansion Incentive (DEI)",
+      "query": "What is the Development and Expansion Incentive in Singapore?",
+      "ground_truth_criteria": [
+        "Singapore",
+        "Development and Expansion Incentive"
+      ],
+      "expected_snippet": "The Development and Expansion Incentive (DEI) encourages companies to upgrade and expand their operations in Singapore.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 8.53,
+      "top_snippet": "\u2022 Investment allowances. \u2022 R&D incentives. An additional 150% tax deduction (effective \nfrom the 2019 year of assessment (Y A) to the 2024 Y A) is \nallowed for certain qualifying R&D expenditure. For "
+    },
+    {
+      "id": "Q20",
+      "jurisdiction": "Australia",
+      "topic": "Dividend Imputation and Franking Credits",
+      "query": "How do franking credits and the imputation system work for Australian dividends?",
+      "ground_truth_criteria": [
+        "Australia",
+        "franked",
+        "imputation credit"
+      ],
+      "expected_snippet": "Dividends paid by Australian resident companies are franked with an imputation credit (franking credit) reflecting company tax paid.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 10.97,
+      "top_snippet": "Dividends. Dividends paid by Australian resident companies are \nfranked with an imputation credit (franking credit) to the extent \nthat Australian corporate income tax has been paid by the \ncompany on"
+    },
+    {
+      "id": "Q21",
+      "jurisdiction": "Switzerland",
+      "topic": "Federal Corporate Tax Rate At a Glance",
+      "query": "What is the federal corporate tax rate in Switzerland at a glance?",
+      "ground_truth_criteria": [
+        "Switzerland",
+        "Corporate Tax Rate (%)"
+      ],
+      "expected_snippet": "Corporate tax rate in Switzerland includes a direct federal tax rate of 8.5% on profits.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 8.99,
+      "top_snippet": "Other significant taxes\nThe following table summarizes other significant taxes. Nature of tax Rate (%)\nValue-added tax (V AT), on deliveries of goods \n and services, including imports of goods and  \n "
+    },
+    {
+      "id": "Q22",
+      "jurisdiction": "Canada",
+      "topic": "Branch Tax on Non-Resident Corporations",
+      "query": "What is the branch tax rate applied to non-resident corporations in Canada?",
+      "ground_truth_criteria": [
+        "Canada",
+        "branch tax"
+      ],
+      "expected_snippet": "Canada imposes a branch tax of 25% on the after-tax profits of a Canadian branch of a non-resident corporation.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 9.59,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. Corporations resident in Canada (whether \nowned by Canadians or nonresidents) are taxed on their worldwide \nincome from all sources, including"
+    },
+    {
+      "id": "Q23",
+      "jurisdiction": "Spain",
+      "topic": "Corporate Capital Gains Treatment",
+      "query": "How are corporate capital gains treated in Spain?",
+      "ground_truth_criteria": [
+        "Spain",
+        "capital gains",
+        "25%"
+      ],
+      "expected_snippet": "In Spain, capital gains are included in taxable income and taxed at the general corporate income tax rate of 25%.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 7.83,
+      "top_snippet": "Capital gains. Spanish law generally treats capital gains as ordi -\nnary income taxable at the regular corporate tax rate. Capital gains realized by nonresidents without a permanent es -\ntablishment i"
+    },
+    {
+      "id": "Q24",
+      "jurisdiction": "Luxembourg",
+      "topic": "Corporate Income Tax Standard Rate",
+      "query": "What is the general corporate income tax rate in Luxembourg?",
+      "ground_truth_criteria": [
+        "Luxembourg",
+        "17%"
+      ],
+      "expected_snippet": "Corporate income tax (imp\u00f4t sur le revenu des collectivit\u00e9s - IRC) is levied at 17% for companies whose taxable income exceeds EUR 200,000.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": false,
+        "hit_at_3": false,
+        "hit_at_5": false
+      },
+      "latency_ms": 8.39,
+      "top_snippet": "Taxes on corporate income and gains\nCorporate income tax. Resident companies are subject to tax on \ntheir worldwide income. Companies whose registered office or \ncentral administration is in Luxembour"
+    },
+    {
+      "id": "Q25",
+      "jurisdiction": "Denmark",
+      "topic": "Withholding Tax Rates Between Related Parties",
+      "query": "What withholding tax rate applies between related parties in Denmark?",
+      "ground_truth_criteria": [
+        "Denmark",
+        "22% rate",
+        "related parties"
+      ],
+      "expected_snippet": "The 22% rate applies to payments between related parties. The rate may be eliminated if certain conditions under EU directives or tax treaties are met.",
+      "production_pipeline": {
+        "retrieved_count": 5,
+        "unique_chunks_count": 1,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "deduplicated_pipeline": {
+        "unique_chunks_evaluated": 2,
+        "hit_at_1": true,
+        "hit_at_3": true,
+        "hit_at_5": true
+      },
+      "latency_ms": 10.5,
+      "top_snippet": "(b) The 22% rate applies to payments between related parties. The rate may be \neliminated if certain conditions are met under the European Union (EU) \nInterest-Royalty Directive or a double tax treaty"
+    }
+  ]
+}
