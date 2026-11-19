@@ -91,6 +91,6 @@ def sql_tool(user_query):
     except RateLimitError:
         raise    
     except Exception as e:
-        prediction = e
+        prediction = str(e)
 
     return prediction

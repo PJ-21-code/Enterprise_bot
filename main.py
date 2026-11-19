@@ -47,7 +47,7 @@ async def main(message: cl.Message):
     try:
        agent_response = chat_with_enterprise_agent(user_query, session_id)
 
-       msg.content = agent_response
+       msg.content = str(agent_response) if not isinstance(agent_response, str) else agent_response
        await msg.update()
 
     except ValueError as ve:
@@ -57,10 +57,6 @@ async def main(message: cl.Message):
 
     except Exception as e:
        msg.content = f"An error occurred: {str(e)}"
-       await msg.update()
-
-    except Exception as e:
-       msg.content = f"⚠️ **API Limit Reached:** Please wait a moment and try again. (Details: {str(e)})"
        await msg.update()
 
 
